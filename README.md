@@ -4,14 +4,16 @@ Projeto Laravel 7 com MySQL 8 usando Docker.
 
 ## Requisitos
 
-- Docker
-- Docker Compose V2 (plugin do Docker)
+- [Docker](https://docs.docker.com/get-docker/)
+  - **Windows/Mac**: Docker Desktop já inclui o Docker Compose V2
+  - **Linux**: Instalar também o [Docker Compose Plugin](https://docs.docker.com/compose/install/linux/)
 
 ## Instalação
 
 1. Clone o repositório e acesse a pasta do projeto:
 ```bash
-cd "Dashboard LG"
+git clone <link-do-repositorio-no-github>
+cd Dashboard-LG
 ```
 
 2. Construa e suba os containers (Laravel será instalado automaticamente):
