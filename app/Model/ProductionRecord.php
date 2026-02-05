@@ -16,4 +16,9 @@ class ProductionRecord extends Model
         'defective_parts',
         'efficiency',
     ];
+
+    public function productionLine()
+    {
+        return $this->belongsTo(ProductionLine::class);
+    }
 }

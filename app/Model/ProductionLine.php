@@ -13,4 +13,14 @@ class ProductionLine extends Model
         'name', 
         'plant_id'
     ];
+
+    public function plant()
+    {
+        return $this->belongsTo(Plant::class);
+    }
+
+    public function productionRecords()
+    {
+        return $this->hasMany(ProductionRecord::class);
+    }
 }
