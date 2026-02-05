@@ -50,3 +50,18 @@ A aplicação estará disponível em: http://localhost:8000
 - MySQL 8.0
 - Docker
 - Docker Compose V2
+
+# Sobre o desenvolvimento
+
+### Docker
+
+O projeto roda com docker para facilitar a utilização das versões específicas de tecnologias aplicadas a este sistema.
+
+### Banco de dados
+
+O diagrama do Banco de Dados ficou com a seguinte estrutura. 
+
+![alt text](DER.png)
+
+O objetivo de ter a tabela plant é simular a acomodação de um possível crescimento do sistema em que se é possível adicionar novas plantas apenas incluindo um novo registro nessa tabela.
+
