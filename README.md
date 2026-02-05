@@ -37,11 +37,27 @@ docker compose restart app
 
 # Executar migrações
 docker compose exec app php artisan migrate
+
+# Popular banco de dados com dados de exemplo
+docker compose exec app php artisan db:seed
 ```
 
 ## Uso
 
 A aplicação estará disponível em: http://localhost:8000
+
+## Estrutura de Dados
+
+O sistema possui dados de exemplo de janeiro/2025 a janeiro/2026 para:
+- **Plant A** com 4 linhas de produção:
+  - Geladeira
+  - Máquina de Lavar
+  - TV
+  - Ar-Condicionado
+- Registros diários de produção (dias úteis) contendo:
+  - Peças boas produzidas
+  - Peças defeituosas
+  - Eficiência calculada
 
 ## Tecnologias
 
@@ -51,7 +67,7 @@ A aplicação estará disponível em: http://localhost:8000
 - Docker
 - Docker Compose V2
 
-# Sobre o desenvolvimento
+## Desenvolvimento
 
 ### Docker
 
@@ -65,3 +81,9 @@ O diagrama do Banco de Dados ficou com a seguinte estrutura.
 
 O objetivo de ter a tabela plant é simular a acomodação de um possível crescimento do sistema em que se é possível adicionar novas plantas apenas incluindo um novo registro nessa tabela.
 
+### Recriar banco de dados
+
+Este procedimento apagará todos os registros anteriores e populará novamente o banco de dados. Se precisar recriar o banco do zero:
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
