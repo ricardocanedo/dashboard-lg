@@ -1,0 +1,48 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dashboardlg_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - laravel_app:/var/www
+    ports:
+      - "8000:8000"
+    networks:
+      - dashboardlg
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    container_name: dashboardlg_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - dashboardlg
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "laravel_user", "-plaravel_password"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+networks:
+  dashboardlg:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+  laravel_app:
+    driver: local
