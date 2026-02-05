@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,7 +11,7 @@ class ProductionRecord extends Model
 
     protected $fillable = [
         'production_line_id',
-        'date',
+        'production_date',
         'good_parts',
         'defective_parts',
         'efficiency',
