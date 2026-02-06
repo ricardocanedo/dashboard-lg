@@ -38,11 +38,6 @@ RUN echo '#!/bin/bash\n\
     php artisan serve --host=0.0.0.0 --port=8000\n\
     ' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
 
-# Script para inicialização automática
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
-
 EXPOSE 8000
+
+CMD ["/usr/local/bin/start.sh"]
