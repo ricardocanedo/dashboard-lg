@@ -1,6 +1,7 @@
 <div class="row mb-4">
     <div class="col-12">
-        <h2 class="mb-0">Dashboard de Produção - Plant A</h2>
+        <h2 class="mb-0">Dashboard de Produção</h2>
+        <h6 class="fw-bold mt-2"><i class="fas fa-industry"></i> Planta A</h6>
         <p class="text-muted text-capitalize">Período: {{ $period['month'] ?? 'N/A' }}</p>
     </div>
 </div>
