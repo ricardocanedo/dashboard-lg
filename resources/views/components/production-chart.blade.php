@@ -3,7 +3,7 @@
         <i class="fas fa-chart-bar"></i> Eficiência por Linha
     </div>
     <div class="card-body">
-        <canvas id="{{ $chartId }}" height="280"></canvas>
+        <canvas id="{{ $chartId }}" height="100"></canvas>
     </div>
 </div>
 
