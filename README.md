@@ -131,7 +131,7 @@ O projeto roda com docker para facilitar a utilização das versões específica
 
 O diagrama do Banco de Dados ficou com a seguinte estrutura. 
 
-![alt text](DER.png)
+![Diagrama Entidade Relacionamento](DER.png)
 
 O objetivo de ter a tabela plant é simular a acomodação de um possível crescimento do sistema em que se é possível adicionar novas plantas apenas incluindo um novo registro nessa tabela.
 
@@ -392,3 +392,24 @@ docker compose exec app php artisan test --failed
 - Todos os testes utilizam o trait `RefreshDatabase` para isolar dados de teste
 - Os factories garantem dados consistentes e realistas para os testes
 
+## Resultados
+
+Dashboard funcional desenvolvido em Laravel 7, apresentando visualização de dados de produção industrial com sistema de filtros e gráficos interativos. A aplicação é responsiva e otimizada para desktop e mobile.
+
+**Desktop:**
+
+![Página exibida em navegadores](screencapture_desktop_page.png)
+
+**Mobile:**
+
+![Página exibida em dispositivos mobile](screencapture_mobile_page.png)
+
+**Principais entregas:**
+- Sistema de filtros por linha, período e eficiência
+- Cards consolidados com métricas agregadas
+- Tabela detalhada por linha de produção
+- Gráfico de eficiência com Chart.js
+- Interface responsiva (Bootstrap 5)
+- Cobertura de testes (Feature + Unit)
+
+**Autor:** Ricardo Canedo (ricardocanedo@live.com)
