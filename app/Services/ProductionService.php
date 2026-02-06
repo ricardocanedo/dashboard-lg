@@ -56,7 +56,7 @@ class ProductionService
             'period' => [
                 'start' => $startDate->format('d/m/Y'),
                 'end' => $endDate->format('d/m/Y'),
-                'month' => $startDate->format('F/Y'),
+                'month' => $startDate->translatedFormat('F/Y'),
                 'start_raw' => $startDate->format('Y-m-d'),
                 'end_raw' => $endDate->format('Y-m-d'),
             ],
