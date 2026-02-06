@@ -146,9 +146,87 @@ Este procedimento apagará todos os registros anteriores e populará novamente o
 docker compose exec app php artisan migrate:fresh --seed
 ```
 
-### Filtros da consulta
+### Sistema de Filtros
 
+O projeto implementa um sistema de filtros seguindo o padrão `filter[campo]`, compatível com bibliotecas como **Spatie Query Builder**. 
+Apensar de no momento atual não estar incorporada a biblioteca, a adoção deste padrão permitiria uma migração fácil caso houvesse a necessidade.
 
+#### Filtros Disponíveis
+
+O dashboard oferece 4 tipos de filtros que podem ser combinados:
+
+1. **Linha de Produção** (`filter[production_line_id]`)
+   - Filtra dados por linha específica (Geladeira, Máquina de Lavar, TV, Ar-Condicionado)
+   - Valor: ID numérico da linha
+   - Default: Todas as linhas
+
+2. **Data Inicial** (`filter[start_date]`)
+   - Define o início do período de análise
+   - Formato: YYYY-MM-DD
+   - Default: Primeiro dia do mês atual (Janeiro/2026 nos dados de exemplo)
+
+3. **Data Final** (`filter[end_date]`)
+   - Define o fim do período de análise
+   - Formato: YYYY-MM-DD
+   - Default: Último dia do mês atual (31/Janeiro/2026 nos dados de exemplo)
+
+4. **Eficiência Mínima** (`filter[min_efficiency]`)
+   - Filtra apenas linhas com eficiência igual ou superior ao valor especificado
+   - Valor: Número decimal (0-100)
+   - Exemplo: 85 retorna apenas linhas com ≥85% de eficiência
+
+#### Como Usar os Filtros
+
+**Via Interface Web:**
+- Preencha os campos desejados no formulário de filtros
+- Clique em "Aplicar Filtros"
+- Os filtros ativos aparecem como badges abaixo do formulário
+- Use "Limpar Filtros" para resetar todos os filtros
+
+**Via URL (Query String):**
+```
+http://localhost:8000/dashboard?filter[production_line_id]=1&filter[start_date]=2026-01-01&filter[end_date]=2026-01-31&filter[min_efficiency]=90
+```
+
+#### Arquitetura do Sistema de Filtros
+
+O sistema foi projetado seguindo boas práticas de desenvolvimento:
+
+**1. Padrão de URL (`filter[campo]`)**
+- Compatível com Spatie Query Builder
+- Facilita migração futura para bibliotecas de filtros
+- URL limpa e semântica
+- Suporta múltiplos filtros simultâneos
+
+**2. Separação de Responsabilidades**
+
+```php
+// Controller: Extrai e valida filtros
+DashboardController::extractFilters()
+
+// Service: Aplica filtros na query
+ProductionService::applyFilters()
+
+// Service: Formata filtros ativos para exibição
+ProductionService::getActiveFilters()
+```
+
+#### Migração Futura para Spatie Query Builder
+
+O sistema já está preparado para migração futura para [Spatie Query Builder](https://github.com/spatie/laravel-query-builder):
+
+**Benefícios do Spatie:**
+- Validação automática de filtros
+- Suporte a relacionamentos
+- Filtros por escopo (scopes)
+- Ordenação e inclusão de relacionamentos
+- Documentação extensa
+
+**Quando migrar:**
+- Quando houver necessidade de filtros mais complexos
+- Para APIs RESTful com múltiplos recursos
+- Quando precisar de filtros por relacionamentos
+- Para aproveitar recursos avançados (includes, sorts, etc.)
 
 ### Componentização do frontend
 
