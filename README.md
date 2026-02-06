@@ -23,6 +23,9 @@ docker compose up -d
 
 3. Aguarde o MySQL estar pronto (10-15 segundos) e configure o Laravel:
 ```bash
+# Instalar dependências do Composer
+docker compose exec app composer install
+
 # Copiar configurações do .env
 docker compose exec app cp .env.example .env
 
