@@ -325,3 +325,70 @@ new Chart(canvas, {
 
 ### Teste Funcionais e Unitários
 
+O projeto possui uma suíte de testes automatizados cobrindo as principais funcionalidades.
+
+#### Executar todos os testes
+
+```bash
+docker compose exec app php artisan test
+```
+
+#### Executar apenas testes unitários
+
+```bash
+docker compose exec app php artisan test --testsuite=Unit
+```
+
+#### Executar apenas testes de feature
+
+```bash
+docker compose exec app php artisan test --testsuite=Feature
+```
+
+#### Cobertura dos Testes
+
+Os testes cobrem:
+- Criação de registros nos modelos
+- Relacionamentos entre modelos
+- Cálculo de eficiência
+- Consultas e agregações de dados
+- Filtros por data e eficiência
+- Filtros por linha de produção
+- Exibição de dados no dashboard
+- Aceitação de parâmetros via query string
+
+#### Executar testes específicos
+
+Para executar um arquivo de teste específico:
+
+```bash
+docker compose exec app php artisan test tests/Unit/PlantTest.php
+```
+
+Para executar um teste específico:
+
+```bash
+docker compose exec app php artisan test --filter=it_can_create_a_plant
+```
+
+#### Debug de Testes
+
+Para ver output detalhado durante a execução dos testes:
+
+```bash
+docker compose exec app php artisan test --verbose
+```
+
+Para executar apenas testes que falharam na última execução:
+
+```bash
+docker compose exec app php artisan test --failed
+```
+
+#### Notas sobre os Testes
+
+- Os testes de feature verificam a funcionalidade end-to-end da aplicação
+- Os testes unitários focam em componentes isolados (modelos, queries)
+- Todos os testes utilizam o trait `RefreshDatabase` para isolar dados de teste
+- Os factories garantem dados consistentes e realistas para os testes
+
