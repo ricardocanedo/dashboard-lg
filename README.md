@@ -13,7 +13,7 @@ Projeto Laravel 7 com MySQL 8 usando Docker.
 1. Clone o repositório e acesse a pasta do projeto:
 ```bash
 git clone https://github.com/ricardocanedo/dashboard-lg.git
-cd Dashboard-LG
+cd dashboard-lg
 ```
 
 2. Construa e suba os containers (Laravel será instalado automaticamente):
