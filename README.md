@@ -48,6 +48,54 @@ docker compose down -v
 docker compose build --no-cache
 ```
 
+## Troubleshooting
+
+### Container reiniciando constantemente
+
+Se o erro `Container is restarting, wait until the container is running` persistir após 15 segundos:
+
+**Sintoma**: Logs mostram `php > Interactive shell` repetidamente
+
+**Solução**:
+
+```bash
+# 1. Parar e remover tudo
+docker compose down -v
+
+# 3. Reconstruir do zero
+docker compose build --no-cache
+
+# 4. Subir containers
+docker compose up -d
+
+# 5. Verificar logs (Ctrl+C para sair)
+docker compose logs -f app
+```
+
+**Verificação**: Os logs devem mostrar:
+```
+Laravel development server started: http://0.0.0.0:8000
+```
+
+Se o problema persistir, verifique:
+- Arquivo `Dockerfile` existe e está correto
+- Arquivo `docker-compose.yml` existe e está correto
+- Compartilhe os logs completos para análise
+
+### Outros problemas comuns
+
+**Container parado após inicialização**:
+```bash
+docker compose start
+```
+
+**Reinstalação completa**:
+```bash
+docker compose down -v
+docker compose build --no-cache
+docker compose up -d
+```
+
 ## Uso
 
 A aplicação estará disponível em: http://localhost:8000

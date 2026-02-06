@@ -39,3 +39,5 @@ RUN echo '#!/bin/bash\n\
     ' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
 
 EXPOSE 8000
+
+CMD ["/usr/local/bin/start.sh"]
