@@ -12,14 +12,19 @@ class ProductionService
     /**
      * Busca dados de produção para o dashboard
      * 
-     * @param int|null $productionLineId ID da linha de produção (null = todas)
+     * @param array $filters Array de filtros (ex: ['production_line_id' => 1, 'start_date' => '2026-01-01'])
      * @return array
      */
-    public function getDashboardData(?int $productionLineId = null): array
+    public function getDashboardData(array $filters = []): array
     {
-        // Período: Janeiro/2026
-        $startDate = Carbon::create(2026, 1, 1)->startOfMonth();
-        $endDate = Carbon::create(2026, 1, 31)->endOfMonth();
+        // Parse de datas dos filtros ou usa padrão (Janeiro/2026)
+        $startDate = isset($filters['start_date'])
+            ? Carbon::parse($filters['start_date'])->startOfDay()
+            : Carbon::create(2026, 1, 1)->startOfMonth();
+
+        $endDate = isset($filters['end_date'])
+            ? Carbon::parse($filters['end_date'])->endOfDay()
+            : Carbon::create(2026, 1, 31)->endOfMonth();
 
         // Query base
         $query = ProductionRecord::query()
@@ -36,16 +41,14 @@ class ProductionService
             ->groupBy('production_lines.id', 'production_lines.name')
             ->orderBy('production_lines.name');
 
-        // Aplica filtro por linha se fornecido
-        if ($productionLineId) {
-            $query->where('production_lines.id', $productionLineId);
-        }
+        // Aplica filtros
+        $query = $this->applyFilters($query, $filters);
 
         // Busca todos os resultados
         $productionLines = $query->get();
 
         // Calcula consolidado geral
-        $consolidated = $this->getConsolidatedData($startDate, $endDate, $productionLineId);
+        $consolidated = $this->getConsolidatedData($startDate, $endDate, $filters);
 
         return [
             'production_lines' => $productionLines,
@@ -54,8 +57,36 @@ class ProductionService
                 'start' => $startDate->format('d/m/Y'),
                 'end' => $endDate->format('d/m/Y'),
                 'month' => $startDate->format('F/Y'),
+                'start_raw' => $startDate->format('Y-m-d'),
+                'end_raw' => $endDate->format('Y-m-d'),
             ],
+            'active_filters' => $this->getActiveFilters($filters),
         ];
+    }
+
+    /**
+     * Aplica filtros na query
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $filters
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function applyFilters($query, array $filters)
+    {
+        // Filtro por linha de produção
+        if (!empty($filters['production_line_id'])) {
+            $query->where('production_lines.id', $filters['production_line_id']);
+        }
+
+        // Filtro por eficiência mínima
+        if (!empty($filters['min_efficiency'])) {
+            $query->havingRaw('avg_efficiency >= ?', [$filters['min_efficiency']]);
+        }
+
+        // Adicione outros filtros aqui conforme necessário
+        // Ex: filtro por planta, turno, etc.
+
+        return $query;
     }
 
     /**
@@ -63,16 +94,17 @@ class ProductionService
      * 
      * @param Carbon $startDate
      * @param Carbon $endDate
-     * @param int|null $productionLineId
+     * @param array $filters
      * @return array
      */
-    private function getConsolidatedData(Carbon $startDate, Carbon $endDate, ?int $productionLineId = null): array
+    private function getConsolidatedData(Carbon $startDate, Carbon $endDate, array $filters = []): array
     {
         $query = ProductionRecord::query()
             ->whereBetween('production_date', [$startDate, $endDate]);
 
-        if ($productionLineId) {
-            $query->where('production_line_id', $productionLineId);
+        // Aplica filtro de linha de produção se existir
+        if (!empty($filters['production_line_id'])) {
+            $query->where('production_line_id', $filters['production_line_id']);
         }
 
         $totals = $query->select(
@@ -95,6 +127,36 @@ class ProductionService
             'total_produced' => $totalProduced,
             'efficiency' => $efficiency,
         ];
+    }
+
+    /**
+     * Retorna filtros ativos formatados para exibição
+     * 
+     * @param array $filters
+     * @return array
+     */
+    private function getActiveFilters(array $filters): array
+    {
+        $active = [];
+
+        if (!empty($filters['production_line_id'])) {
+            $line = ProductionLine::find($filters['production_line_id']);
+            $active['production_line'] = $line ? $line->name : 'Linha não encontrada';
+        }
+
+        if (!empty($filters['start_date'])) {
+            $active['start_date'] = Carbon::parse($filters['start_date'])->format('d/m/Y');
+        }
+
+        if (!empty($filters['end_date'])) {
+            $active['end_date'] = Carbon::parse($filters['end_date'])->format('d/m/Y');
+        }
+
+        if (!empty($filters['min_efficiency'])) {
+            $active['min_efficiency'] = $filters['min_efficiency'] . '%';
+        }
+
+        return $active;
     }
 
     /**
