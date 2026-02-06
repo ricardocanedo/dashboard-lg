@@ -40,6 +40,10 @@ docker compose exec app php artisan migrate
 docker compose exec app php artisan db:seed
 ```
 
+## Uso
+
+A aplicação estará disponível em: http://localhost:8000
+
 ## Reinstalação
 
 Caso precise reinstalar as imagens e containers, antes do passo 2 da instalação rode:
@@ -95,10 +99,6 @@ docker compose down -v
 docker compose build --no-cache
 docker compose up -d
 ```
-
-## Uso
-
-A aplicação estará disponível em: http://localhost:8000
 
 ## Estrutura de Dados
 
